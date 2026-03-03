@@ -1,0 +1,37 @@
+\doxysection{Calculus.\+c}
+\hypertarget{_calculus_8c-example}{}\label{_calculus_8c-example}
+\begin{DoxyCodeInclude}{0}
+\DoxyCodeLine{}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <stdlib.h>}\ \ \textcolor{comment}{//\ para\ rand()\ e\ srand()}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <time.h>}\ \ \ \ \textcolor{comment}{//\ para\ time()}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_calc_8h}{Calc.h}}"{}}\ \ \ \ \textcolor{comment}{//\ incluir\ a\ biblioteca}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#ifndef\ SIZE}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define\ SIZE\ 10}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int}\ \mbox{\hyperlink{_calculus_8c_a840291bc02cba5474a4cb46a9b9566fe}{main}}(\textcolor{keywordtype}{void})\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//int\ v[SIZE]=\{12,34,23,56,47\};}}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{example_8c_a49bd4fd982fc583de32fd3a818288e80}{v}}[\mbox{\hyperlink{_calculus_8c_a70ed59adcb4159ac551058053e649640}{SIZE}}];}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ Inicializar\ gerador\ de\ números\ aleatórios}}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ valores\ aleatórios\ entre\ 0\ e\ 99\ (\%100)}}
+\DoxyCodeLine{\ \ \ \ srand((\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int})time(NULL));}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{_calculus_8c_a70ed59adcb4159ac551058053e649640}{SIZE}};\ i++)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{example_8c_a49bd4fd982fc583de32fd3a818288e80}{v}}[i]\ =\ rand()\ \%\ 100;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{//\ Calcula\ a\ média\ chamando\ a\ função\ que\ está\ na\ biblioteca}}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{float}\ m=\mbox{\hyperlink{_calc_8c_af7599a9733ebfacf030f624a2bca73e8}{CalcAverage}}(\mbox{\hyperlink{example_8c_a49bd4fd982fc583de32fd3a818288e80}{v}},\mbox{\hyperlink{_calculus_8c_a70ed59adcb4159ac551058053e649640}{SIZE}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ printf(\textcolor{stringliteral}{"{}Array\ size\ =\ \%d\(\backslash\)n"{}},\ \mbox{\hyperlink{_calculus_8c_a70ed59adcb4159ac551058053e649640}{SIZE}});}
+\DoxyCodeLine{\ \ \ \ printf(\textcolor{stringliteral}{"{}Average:\ \%4.1f"{}},m);}
+\DoxyCodeLine{\ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCodeInclude}
+ 

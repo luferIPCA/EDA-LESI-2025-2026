@@ -1,0 +1,22 @@
+#lufer
+#makefile "específica"
+#executar com "make"
+#-----------------------------
+
+
+#-Wall 		- tratar warnins
+#-std=c11   - cuidar da versão do compilador
+
+all: Calculus.exe
+
+Calc.o: Calc.c Calc.h
+	gcc -Wall -std=c11 -g -O0 -c Calc.c -o Calc.o
+
+libcalc.a: Calc.o
+	ar rcs libcalc.a Calc.o
+
+Calculus.exe: Calculus.c libcalc.a
+	gcc Calculus.c -L. -lcalc -o Calculus.exe -mconsole
+
+clean:
+	del /Q *.o *.a Calculus.exe
