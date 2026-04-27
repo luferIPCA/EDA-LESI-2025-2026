@@ -16,7 +16,7 @@
 
 void main() {
 
-#pragma region Element
+#pragma region Listas
 
 #pragma region PerceberStruct
 
@@ -45,7 +45,7 @@ void main() {
 
 #pragma endregion
 
-#pragma region Lista
+#pragma region Manipular-Lista-Basico
 
 	Element e1 = { 12,"Ola", NULL};
 	Element* head = NULL;
@@ -60,7 +60,7 @@ void main() {
 
 #pragma endregion
 
-#pragma endregion
+#pragma region Manipular-Lista-Inserções
 
 	//outra lista
 	Element* inicio = NULL;
@@ -84,6 +84,25 @@ void main() {
 	if (res) {
 		printf("Inserido!\n");
 	}
+#pragma endregion
 
+#pragma endregion
+
+#pragma region CALLBACK-FUNCTIONS
+
+	//v1
+	//int PercorreListaOperacao(Element* h, int (*f)(void* x)) 
+	r = PercorreListaOperacao(head, &Dobro);	// Duplica todos os valores
+
+	//Após
+	r = PercorreListaOperacao(head, &Show);	// Mostra a Lista
+
+	//v2
+	// r será 1 se a lista não estiver vazia
+	r= PercorreListaOperacaoII(head, &OpDobro);      // Duplica todos os valores
+	r= PercorreListaOperacaoII(head, &OpMaiusculas); // Nomes em Maiusculas
+	r= PercorreListaOperacaoII(head, &OpMostrar);    // Mostra a Lista
+
+#pragma endregion
 
 }

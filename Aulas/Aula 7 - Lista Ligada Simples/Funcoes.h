@@ -33,6 +33,19 @@ Element* InsereOrdenadoII(Element* inicio, Element* novo);
 bool InsereOrdenadoIII(Element** inicio, Element* novo);
 Element* InsereOrdenadoIV(Element* inicio, Element* novo, bool* inserido);
 Resultado InsereOrdenadoV(Element* inicio, Element* novo);
+
+//Auxiliares
+int PercorreListaOperacao(Element* h, int (*f)(void *x));
+int Dobro(void *x);
+int Show(void* x);
+
+
+//Outra versão
+int PercorreListaOperacaoII(Element* h, void (*f)(void* x));
+void OpDobro(void* x);
+void OpMostrar(void* x);
+void OpMaiusculas(void* x);
+
 #pragma endregion
 
 

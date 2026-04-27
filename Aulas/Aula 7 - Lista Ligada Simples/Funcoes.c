@@ -423,4 +423,63 @@ Element* RemoveTodos(Element* inicio, int valor, bool* removido) {
 
 	return inicio;
 }
+
+#pragma endregion
+
+#pragma region PARAMETER-FUNCTIONS-CALLBACK-FUNCTIONS
+
+int PercorreListaOperacao(Element* h, int (*f)(void* x)) {
+	if (!h) return -1;
+	Element* aux = h;
+	while (aux) {
+		aux->value = f(&(aux->value));
+		aux = aux->prox;
+	}
+	return 1;
+}
+
+int Dobro(void *x) {
+	int *v = (int*)x;
+	*v = *v * 2;
+	return (*v);
+}
+
+int Show(void* x) {
+	Element* v = (Element*)x;
+	printf("Valor: %d\n", v->value);
+	return v->value;
+}
+
+#pragma region VERSAO 2
+
+int PercorreListaOperacaoII(Element* h, void (*f)(void* x)) {
+	if (!h) return -1;
+
+	Element* aux = h;
+	while (aux) {
+		// Passamos o apontador do nodo atual para a função de callback
+		f((void*)aux);
+		aux = aux->prox;
+	}
+	return 1;
+}
+
+void OpDobro(void* x) {
+	Element* node = (Element*)x;
+	node->value *= 2;
+}
+
+void OpMostrar(void* x) {
+	Element* node = (Element*)x;
+	printf("Nome: %s | Valor: %d\n", node->nome, node->value);
+}
+
+void OpMaiusculas(void* x) {
+	Element* node = (Element*)x;
+	for (int i = 0; node->nome[i] != '\0'; i++) {
+		node->nome[i] = toupper((unsigned char)node->nome[i]);
+	}
+}
+#pragma endregion
+
 #pragma endregion
