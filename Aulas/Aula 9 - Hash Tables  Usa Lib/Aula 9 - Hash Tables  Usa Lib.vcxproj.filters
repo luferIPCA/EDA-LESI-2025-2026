@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Hashing.c" />
+    <ClCompile Include="main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="hash.h" />
+    <ClInclude Include="Libs\Dados.h">
+      <Filter>Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\Funcoes.h">
+      <Filter>Libs</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Libs">
+      <UniqueIdentifier>{a3a1fd57-5cdf-4759-8af1-cd8552588824}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
