@@ -39,9 +39,25 @@ typedef struct Elements {
 	struct Elements* tail;
 }Elements;
 
-
 typedef struct ElementFile {
 	int value;
 	char nome[M];
 }ElementFile;
+
+#pragma region VERSAÔ-II
+
+//Outra possibilidade
+
+typedef struct Dados {
+	int value;
+	char nome[M];
+}Dados;
+
+typedef struct ElementII {
+	Dados dados;
+	bool apagado;
+	struct ElementII* prox;
+}ElementII;
+
+#pragma endregion
 
