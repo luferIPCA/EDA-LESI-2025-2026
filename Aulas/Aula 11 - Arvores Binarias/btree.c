@@ -12,6 +12,7 @@ https://www.geeksforgeeks.org/binary-tree-set-1-introduction/?ref=lbp
 #include "btree.h"
 //#include <malloc.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 /**
  * @brief Inicia uma Árvore Binária de Procura
@@ -46,7 +47,7 @@ H2
 */
 NodeII *NewNodeGeneral(Element e) {
 	NodeII *node = (NodeII*)malloc(sizeof(NodeII));
-	if (node = NULL) return NULL;	//problemas ao criar espaço em memória
+	if (node == NULL) return NULL;	//problemas ao criar espaço em memória
 	/*if (node->element = (Element *)malloc(sizeof(Element)) == NULL) {
 		free(node);
 		return NULL;
@@ -104,10 +105,10 @@ Node *FindNode(Element e, Node *root) {
 /*
 Verifica se determinado elemento existe: IMPLEMENTAR
 */
-Boolean ExistNode(Element e, Node *root){}
+bool ExistNode(Element e, Node *root){}
 
 /*
-Determina o maior elemento da árvore: IMPLEMENTAR
+Determina o maior elemento da árvore
 */
 Node *GetMax(Node *root) {
 	if (root == NULL) return NULL;
@@ -145,7 +146,7 @@ void DoSomethingToAllNodes(struct Node *root)
 
 /**
  * @brief Insere Nodo da Árvore.
- * Note: Violates SOLID --> Correct
+ * Note: Parcially violates SOLID --> Correct
  * @param root
  * @param e
  * @return 
@@ -168,8 +169,14 @@ Node* AddNode(Node* root, Element e) {
 	return root;
 }
 
-//Respeitar SOLID
 
+/**
+ * @brief Insere Nodo da Árvore.
+ * Respect SOLID
+ * @param root
+ * @param e
+ * @return
+ */
 Node* AddNodeII(Node* root, Node* novo) {
 
 	if (root == NULL)
@@ -186,21 +193,26 @@ Node* AddNodeII(Node* root, Node* novo) {
 }
 
 //H3: como controlar?
-void AddNodeIII(PtrNode *root, Element e) {
-//void AddNodeIII(Node **root, Element e) {
+//PtrNode AddNodeIII(PtrNode *root, Element e) {
+bool AddNodeIII(Node **root, Element e) {
 	if (*root == NULL) {
-		root = NewNode(e);
-		return root;
+		*root = NewNode(e);
+		return true;
+	}
+	if ((*root)->element.val == e.val) {
+		return false; // ignorar repetidos
 	}
 	if ((*root)->element.val > e.val) {
-		AddNodeIII(&(*root)->leftTree, e);
+		return AddNodeIII(&(*root)->leftTree, e);
 	}
 	else
-		AddNodeIII(&(*root)->rightTree, e);
+		return AddNodeIII(&(*root)->rightTree, e);
 }
 
 /*
 Remove Nodo da Árvore
+1º Procurar
+2º Apagar se encontrado
 */
 PtrNode DeleteNode(PtrNode root, Element e) {
 	//árvore vazia ou enexistente
@@ -264,33 +276,24 @@ PtrNode DeleteCurrentNode(PtrNode root) {
 }
 
 #pragma region DeleteII
-/* Given a binary search tree
-   and a key, this function
-   deletes the key and
-   returns the new root */
+/* Remover num único método */
 Node* deleteNode(Node* root, int key)
 {
-	// base case
+	// basico
 	if (root == NULL)
 		return root;
 
-	// If the key to be deleted
-	// is smaller than the root's
-	// key, then it lies in left subtree
+	// Se menor, apagar na sub-arvore esquerda
 	if (key < root->element.val)
 		root->leftTree = deleteNode(root->leftTree, key);
 
-	// If the key to be deleted
-	// is greater than the root's
-	// key, then it lies in right subtree
+	// Se maio, apagar na sub-arvore direita
 	else if (key > root->element.val)
 		root->rightTree = deleteNode(root->rightTree, key);
 
-	// if key is same as root's key,
-	// then This is the node
-	// to be deleted
+	//Se encontrei, apagar!
 	else {
-		// node with only one child or no child
+		// node com uma ou sem nenhuma sub-arvores
 		if (root->leftTree == NULL) {
 			struct node* temp = root->rightTree;
 			free(root);
@@ -302,16 +305,14 @@ Node* deleteNode(Node* root, int key)
 			return temp;
 		}
 
-		// node with two children:
-		// Get the inorder successor
-		// (smallest in the right subtree)
+		// node com duas sub-arvores
+		// encontrar o mais pequeno à direita
 		Node* temp = FindMin(root->rightTree);
 
-		// Copy the inorder
-		// successor's content to this node
+		// Copiar o valor do node menor
 		root->element.val = temp->element.val;
 
-		// Delete the inorder successor
+		// apagar o node menor na sub-árvore direita
 		root->rightTree = deleteNode(root->rightTree, temp->element.val);
 	}
 	return root;
@@ -466,19 +467,143 @@ PtrNode BSTBalance(PtrNode root, Node *list, int ini, int end) {
 Cria uma "Lista" a partir dos elementos de uma arvore
 E se for para uma Lista verdadeira?
 */
-void BST2List(PtrNode root, unsigned int *count, Node *list) {
+void BST2List(PtrNode root, int *count, Node *list) {
 	if (root != NULL) {
 		BST2List(root->leftTree, count, list);
+		printf("count = %d\n", *count);
 		list[(*count)++].element = root->element;
 		BST2List(root->rightTree, count, list);
 	}
 }
 
+#pragma region AVL
+
+int height(PtrNodeBal n) {
+	return (n == NULL) ? 0 : n->height;
+}
+
+//int max(int a, int b) {
+//	return (a > b) ? a : b;
+//}
+
+int getBalance(PtrNodeBal n) {
+	return (n == NULL) ? 0 : height(n->leftTree) - height(n->rightTree);
+}
+
+/*!
+ *  Rotação à direita
+ *
+ *      @param [in] y
+ *
+ *      @return
+ *      y
+ *     /  
+ *    x   
+ *   / \  
+ *  A   T2    
+ */
+PtrNodeBal rotateRight(PtrNodeBal y) {
+	PtrNodeBal x = y->leftTree;
+	PtrNodeBal T2 = x->rightTree;
+
+	x->rightTree = y;
+	y->leftTree = T2;
+
+	y->height = max(height(y->leftTree), height(y->rightTree)) + 1;
+	x->height = max(height(x->leftTree), height(x->rightTree)) + 1;
+
+	return x;
+}
+
+/*!
+ *  Rotação à Esquerda
+ *
+ *      @param [in] y
+ *
+ *      @return
+ *      y
+ *       \
+ *        x
+ *       / \
+ *      T2  K
+ *
+ *      x
+ *     / \
+ *    T2   y
+ *       / 
+ *      K
+ */
+PtrNodeBal rotateLeft(PtrNodeBal y) {
+	PtrNodeBal x = y->rightTree;
+	PtrNodeBal T2 = x->leftTree;
+
+	x->leftTree = y;
+	y->rightTree = T2;
+
+	x->height = max(height(x->leftTree), height(x->rightTree)) + 1;
+	y->height = max(height(y->leftTree), height(y->rightTree)) + 1;
+
+	return y;
+}
+
+/*!
+ *  Insere Balanceado.
+ *  Esta implementação não respeita o SOLID..porquê? Corrija!
+ *
+ *      @param [in] node
+ *      @param [in] e
+ *
+ *      @return
+ */
+PtrNodeBal insertAVL(PtrNodeBal node, Element e) {
+	if (node == NULL) {
+		PtrNodeBal newNode = (PtrNodeBal)malloc(sizeof(NodeBal));
+		newNode->element = e;
+		newNode->leftTree = newNode->rightTree = NULL;
+		newNode->height = 1;
+		return newNode;
+	}
+	if (e.val < node->element.val)
+		node->leftTree = insertAVL(node->leftTree, e);
+	else if (e.val > node->element.val)
+		node->rightTree = insertAVL(node->rightTree, e);
+	else
+		return node;	//ignora repetidos
+
+	node->height = 1 + max(height(node->leftTree), height(node->rightTree));
+
+	int balance = getBalance(node);
+
+	// Left Left
+	if (balance > 1 && (e.val < node->leftTree->element.val))
+		return rotateRight(node);
+
+	// Right Right
+	if (balance < -1 && (e.val > node->rightTree->element.val))
+		return rotateLeft(node);
+
+	// Left Right
+	if (balance > 1 && (e.val > node->leftTree->element.val)) {
+		node->leftTree = rotateLeft(node->leftTree);
+		return rotateRight(node);
+	}
+
+	// Right Left
+	if (balance < -1 && (e.val < node->rightTree->element.val)) {
+		node->rightTree = rotateRight(node->rightTree);
+		return rotateLeft(node);
+	}
+
+	return node;
+}
+
+#pragma endregion
+
 /*
 Mostrar um determinado nível da árvore
 */
 void Show(PtrNode root, int nivel) {
-	unsigned int i;
+	int i;
 	if (root == NULL) {
 		for (i = 0; i < nivel; i++) printf("\t");	//indentar
 		printf("*\n");
@@ -501,7 +626,7 @@ Exp* Parse(char v[], int i) {
 
 	if (i < sizeof(v)) {
 		o = v[i];
-		aux = (PtrNode)malloc(sizeof(Node));
+		aux = (Exp*)malloc(sizeof(Exp));
 		if (!aux) return NULL;
 		aux->val = o;		
 		if ((o == '+') || (o == '-')) {
@@ -543,107 +668,11 @@ int CountGreaterX(Node* root, int x)
 		return CountGreaterX(root->rightTree, x);
 }
 
-#pragma region AVL
-int height(PtrNodeBal n) {
-	return (n == NULL) ? 0 : n->height;
+void DebugPrint(Node* r) {
+	if (!r) return;
+
+	printf("Node val = %d\n", r->element.val);
+
+	DebugPrint(r->leftTree);
+	DebugPrint(r->rightTree);
 }
-
-//int max(int a, int b) {
-//	return (a > b) ? a : b;
-//}
-
-int getBalance(PtrNodeBal n) {
-	return (n == NULL) ? 0 : height(n->leftTree) - height(n->rightTree);
-}
-
-/*!
- *  Rotação à direita
- *
- *      @param [in] y 
- *
- *      @return 
- */
-PtrNodeBal rotateRight(PtrNodeBal y) {
-	PtrNodeBal x = y->leftTree;
-	PtrNodeBal T2 = x->rightTree;
-
-	x->rightTree = y;
-	y->leftTree = T2;
-
-	y->height = max(height(y->leftTree), height(y->rightTree)) + 1;
-	x->height = max(height(x->leftTree), height(x->rightTree)) + 1;
-
-	return x;
-}
-
- /*!
-  *  Rotação à Esquerda
-  *
-  *      @param [in] x 
-  *
-  *      @return 
-  */
- PtrNodeBal rotateLeft(PtrNodeBal x) {
-	 PtrNodeBal y = x->rightTree;
-	 PtrNodeBal T2 = y->leftTree;
-
-	 y->leftTree = x;
-	 x->rightTree = T2;
-
-	 x->height = max(height(x->leftTree), height(x->rightTree)) + 1;
-	 y->height = max(height(y->leftTree), height(y->rightTree)) + 1;
-
-	 return y;
- }
-
- /*!
-  *  Insere Balanceado.
-  *  Esta implementação não respeita o SOLID..porquê? Corrija!
-  *
-  *      @param [in] node 
-  *      @param [in] e    
-  *
-  *      @return 
-  */
- PtrNodeBal insertAVL(PtrNodeBal node, Element e) {
-	 if (node == NULL) {
-		 PtrNodeBal newNode = (PtrNodeBal)malloc(sizeof(NodeBal));
-		 newNode->element = e;
-		 newNode->leftTree = newNode->rightTree = NULL;
-		 newNode->height = 1;
-		 return newNode;
-	 } 
-	 if (e.val < node->element.val)
-		 node->leftTree = insertAVL(node->leftTree, e);
-	 else if (e.val > node->element.val)
-		 node->rightTree = insertAVL(node->rightTree, e);
-	 else
-		 return node;
-
-	 node->height = 1 + max(height(node->leftTree), height(node->rightTree));
-
-	 int balance = getBalance(node);
-
-	 // Left Left
-	 if (balance > 1 && (e.val < node->leftTree->element.val))
-		 return rotateRight(node);
-
-	 // Right Right
-	 if (balance < -1 && (e.val > node->rightTree->element.val))
-		 return rotateLeft(node);
-
-	 // Left Right
-	 if (balance > 1 && (e.val > node->leftTree->element.val)) {
-		 node->leftTree = rotateLeft(node->leftTree);
-		 return rotateRight(node);
-	 }
-
-	 // Right Left
-	 if (balance < -1 && (e.val < node->rightTree->element.val)) {
-		 node->rightTree = rotateRight(node->rightTree);
-		 return rotateLeft(node);
-	 }
-
-	 return node;
- }
-#pragma endregion

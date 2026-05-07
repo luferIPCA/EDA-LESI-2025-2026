@@ -7,10 +7,13 @@ https://www.geeksforgeeks.org/binary-tree-set-1-introduction/?ref=lbp
 #include <stdio.h>
 #include <locale.h>	// ASCII SET
 #include "btree.h"
+#include <stdbool.h>
 
 int main() {
 
 	setlocale(LC_ALL, "Portuguese");
+
+#pragma region ESSENCIAL
 
 	Node* raiz = InitTree();		//raiz=NULL;
 	//printf("%d", raiz == NULL);
@@ -61,24 +64,41 @@ int main() {
 
 	printf("-------------------\n");
 
-	unsigned int tot = TreeSize(raiz);
-	unsigned int count = 0;
+#pragma endregion
 
-	//Node *listNode;
-	//listNode = (Node *)malloc(sizeof(Node)*tot);
-	//BTS2List(raiz, &count, listNode);
+#pragma region BALANCEAMENTO
 
-	Show(raiz,1);
-
-//	raiz = Balance(raiz);
+	 int tot = TreeSize(raiz);
+	 int count = 0;
 
 	Show(raiz, 1);
+	//ou
+	//DebugPrint(raiz);
+
+	raiz = Balance(raiz);
+
+	Show(raiz, 1);
+
+#pragma endregion
+
+#pragma region Folha_10
 
 	//Folha 10
 	Exp* aux;
 	aux = Parse("+23", 0);
 	system("pause");
 	return 0;
+
+#pragma endregion
+
+
+#pragma region DUPLOS_APONTADORES
+
+	Node* root = NULL;
+	bool res = AddNodeIII(&root, e);
+
+#pragma endregion
+
 }
 
 //Explorar

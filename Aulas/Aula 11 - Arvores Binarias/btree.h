@@ -17,7 +17,9 @@ https://www.geeksforgeeks.org/binary-tree-set-1-introduction/?ref=lbp
 #define N 50
 #define Max(x,y)  ((x>y)? (x) : (y))
 
-typedef   enum Boolean { false, true }   Boolean;
+#include <stdbool.h>
+//or
+// typedef   enum Boolean { false, true }   Boolean;
 
 /**
  * Valor do nodo de uma árvore - Element
@@ -78,7 +80,7 @@ int TreeHeight(PtrNode r);
 
 PtrNode FindNode(Element e, PtrNode root);
 
-Boolean ExistNode(Element e, PtrNode root);
+bool ExistNode(Element e, PtrNode root);
 
 PtrNode GetMax(PtrNode root);
 
@@ -104,7 +106,8 @@ void ShowII(char *s);
 
 PtrNode Balance(PtrNode root);
 PtrNode BSTBalance(PtrNode root,Node *list, int ini, int end);
-void BST2List(PtrNode root, unsigned int tot, Node *list);
+void BST2List(PtrNode root, int *tot, Node *list);
+bool AddNodeIII(Node** root, Element e);
 
 // =========== COnstruir BTS Balanceada ========
 
@@ -125,11 +128,7 @@ int getBalance(PtrNodeBal n);
 PtrNodeBal rotateRight(PtrNodeBal y);
 PtrNodeBal rotateLeft(PtrNodeBal x);
 PtrNodeBal insertAVL(PtrNodeBal node, Element e);
-
-
-
-
-
+void DebugPrint(Node* r);
 
 //Folha de Exercicios 10
 struct Exp {
