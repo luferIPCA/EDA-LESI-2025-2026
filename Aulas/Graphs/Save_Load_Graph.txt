@@ -1,0 +1,158 @@
+
+
+typedef struct Adj {
+    float distancia;
+    int codVerticeDestino;
+    struct Adj* next;
+} Adj;
+
+typedef struct Vertice {
+    char* nomeCidade;       // Dynamically allocated string for the city name
+    struct Vertice* prox;
+    struct Adj* adjacencias;
+} Vertice;
+
+typedef struct GraphD {
+    int numVertices;
+    Vertice* head;
+} GraphD;
+
+---------------------------------
+
+bool saveGraphToFile(GraphD* graph, const char* filename) {
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        return false;  // Error opening file
+    }
+
+    // Write the number of vertices
+    fwrite(&graph->numVertices, sizeof(int), 1, file);
+
+    Vertice* currentVertex = graph->head;
+    while (currentVertex) {
+        // Write the length of the city name string
+        size_t nameLength = strlen(currentVertex->nomeCidade) + 1; // +1 for null terminator
+        fwrite(&nameLength, sizeof(size_t), 1, file);
+
+        // Write the city name string itself
+        fwrite(currentVertex->nomeCidade, sizeof(char), nameLength, file);
+
+        // Write the adjacency list for this vertex
+        Adj* currentAdj = currentVertex->adjacencias;
+        while (currentAdj) {
+            // Write the distance and the destination vertex code
+            fwrite(&currentAdj->distancia, sizeof(float), 1, file);
+            fwrite(&currentAdj->codVerticeDestino, sizeof(int), 1, file);
+            currentAdj = currentAdj->next;
+        }
+
+        // Write a special marker to indicate the end of the adjacency list
+        float marker = -1.0;  // A marker value that indicates the end of the adjacency list
+        fwrite(&marker, sizeof(float), 1, file);
+
+        // Move to the next vertex
+        currentVertex = currentVertex->prox;
+    }
+
+    fclose(file);
+    return true;  // Success
+}
+
+------------------------
+
+GraphD* readGraphFromFile(const char* filename) {
+    FILE *file = fopen(filename, "rb");
+    if (!file) {
+        return NULL;  // Error opening file
+    }
+
+    GraphD* graph = (GraphD*)malloc(sizeof(GraphD));
+    if (!graph) {
+        fclose(file);
+        return NULL;  // Memory allocation failure
+    }
+
+    // Read the number of vertices
+    fread(&graph->numVertices, sizeof(int), 1, file);
+
+    // Initialize the head of the graph to NULL
+    graph->head = NULL;
+
+    Vertice* prevVertex = NULL;
+    for (int i = 0; i < graph->numVertices; ++i) {
+        // Allocate memory for a new vertex
+        Vertice* newVertex = (Vertice*)malloc(sizeof(Vertice));
+        if (!newVertex) {
+            free(graph);  // Cleanup before returning
+            fclose(file);
+            return NULL;  // Memory allocation failure
+        }
+
+        // Read the length of the city name string
+        size_t nameLength;
+        fread(&nameLength, sizeof(size_t), 1, file);
+
+        // Allocate memory for the city name string
+        newVertex->nomeCidade = (char*)malloc(nameLength * sizeof(char));
+        if (!newVertex->nomeCidade) {
+            free(newVertex);  // Cleanup before returning
+            free(graph);  // Cleanup before returning
+            fclose(file);
+            return NULL;  // Memory allocation failure for city name
+        }
+
+        // Read the city name string
+        fread(newVertex->nomeCidade, sizeof(char), nameLength, file);
+
+        newVertex->prox = NULL;
+        newVertex->adjacencias = NULL;
+
+        // Link the vertex to the previous one
+        if (prevVertex) {
+            prevVertex->prox = newVertex;
+        } else {
+            graph->head = newVertex;  // First vertex is the head of the list
+        }
+
+        prevVertex = newVertex;
+
+        // Read the adjacency list for this vertex
+        Adj* prevAdj = NULL;
+        while (1) {
+            float distance;
+            fread(&distance, sizeof(float), 1, file);
+            if (distance == -1.0) break;  // End of adjacency list marker
+
+            int destCode;
+            fread(&destCode, sizeof(int), 1, file);
+
+            // Allocate memory for the adjacency
+            Adj* newAdj = (Adj*)malloc(sizeof(Adj));
+            if (!newAdj) {
+                free(newVertex->nomeCidade);  // Cleanup before returning
+                free(newVertex);  // Cleanup before returning
+                free(graph);  // Cleanup before returning
+                fclose(file);
+                return NULL;  // Memory allocation failure for adjacency
+            }
+
+            // Set the adjacency data
+            newAdj->distancia = distance;
+            newAdj->codVerticeDestino = destCode;
+            newAdj->next = NULL;
+
+            // Link the adjacency to the previous one
+            if (prevAdj) {
+                prevAdj->next = newAdj;
+            } else {
+                newVertex->adjacencias = newAdj;  // First adjacency is the head of the list
+            }
+
+            prevAdj = newAdj;
+        }
+    }
+
+    fclose(file);
+    return graph;  // Success, return the loaded graph
+}
+
