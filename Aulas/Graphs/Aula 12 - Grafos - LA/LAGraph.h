@@ -11,6 +11,8 @@
 #define GRF
 #define _CRT_SECURE_NO_WARNINGS
 #include <limits.h> // Para usar o valor INFINITO (INT_MAX)
+#include <string.h>
+#include <stdio.h>
 
 //=========================================================
 //H1 : grafo orientado, não pesado (pouco eficiente): porquê?

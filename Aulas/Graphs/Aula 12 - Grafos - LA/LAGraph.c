@@ -5,7 +5,9 @@
 // Procura em Largura:		Queue
 //lufer
 */
-#include <stdio.h>
+
+#pragma warning( disable : 4996 ) //evita MSG ERROS: _CRT_SECURE_NO_WARNINGS
+
 #include <stdbool.h>
 #include "LAGraph.h"
 #include "assert.h"
@@ -16,8 +18,6 @@
 //Ver: http://www.geeksforgeeks.org/graph-and-its-representations/
 //Exercicio: 
 //Analisar http://www.thecrazyprogrammer.com/2014/03/depth-first-search-dfs-traversal-of-a-graph.html
-
-#pragma warning( disable : 4996 ) //evita MSG ERROS: _CRT_SECURE_NO_WARNINGS
 
 #pragma region GRAFO_NAO_ORIENTADO_I
 
@@ -317,18 +317,17 @@ bool AdjacentDestroy(Adjacent *ptAdjacent)
 	return true;
 }
 
-Node *NodeCreate(int identifier, char name[])
+Node *NodeCreate(int identifier, char *name)
 {
 	Node *aux;
 	aux = (Node*)malloc(sizeof(Node));
-	if (aux == NULL)
+	if (aux != NULL)
 	{
-		return NULL;
+		strcpy(aux->city, name);
+		aux->id = identifier;
+		aux->ptAdjacent = NULL;
+		aux->ptNext = NULL;
 	}
-	strcpy(aux->city, name);
-	aux->id= identifier;
-	aux->ptAdjacent = NULL;
-	aux->ptNext = NULL;
 	return aux;
 }
 
@@ -663,7 +662,7 @@ void destroyGraph(Graph* g) {
 }
 
 bool SaveGraphToCSV(Graph* g, char* filename) {
-	if (!g) return;
+	if (!g) return false;
 	FILE* fp = fopen(filename, "w");
 	if (!fp) return false;
 
@@ -716,7 +715,7 @@ Graph* LoadGraphFromCSV(char* filename) {
 	// 2. Ler as arestas (origem;destino;peso)
 	while (true) {
 		int v_origem = 0, v_destino = 0;
-		float v_peso = 0.0, decimal = 0.1;
+		float v_peso = 0.0, decimal = 1;
 		bool emDecimal = false;
 
 		// Ler Origem (até ao ;)

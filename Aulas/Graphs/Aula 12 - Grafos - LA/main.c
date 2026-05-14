@@ -5,16 +5,13 @@ Consultar:
 https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/
 */
 #define _CRT_SECURE_NO_WARNINGS
-#pragma warning( disable : 4996 ) //evita MSG ERROS: _CRT_SECURE_NO_WARNINGS
+//ou
+// #pragma warning( disable : 4996 ) //evita MSG ERROS: _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <locale.h>	// ASCII SET
 #include "LAGraph.h"
-
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
 
 int main() {
 	setlocale(LC_ALL, "Portuguese");
