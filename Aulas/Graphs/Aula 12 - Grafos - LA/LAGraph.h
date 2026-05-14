@@ -9,13 +9,13 @@
 //ou
 #ifndef GRF
 #define GRF
-
-
+#define _CRT_SECURE_NO_WARNINGS
+#include <limits.h> // Para usar o valor INFINITO (INT_MAX)
 
 //=========================================================
 //H1 : grafo orientado, não pesado (pouco eficiente): porquê?
 //=========================================================
-#define TOTALVERTICES 8
+#define TOTALVERTICES 20
 
 //Vertice
 typedef struct Vertice {
@@ -73,6 +73,8 @@ bool printGraph(Graph* graph);
 bool printGraphWeight(Graph* graph, bool pesado);
 
 
+#pragma region H3
+
 //=========================================================
 //H3
 //Só estruturas dinâmicas
@@ -80,6 +82,8 @@ bool printGraphWeight(Graph* graph, bool pesado);
 
 typedef struct Node Node;
 typedef struct Adjacent Adjacent;
+
+#define SIZENAME 50
 
 /*!
  *  Adjacências
@@ -90,12 +94,12 @@ struct Adjacent {
 };
 
 /*!
- *  Vertices
+ *  Node==Vertice
  */
 struct Node
 {
-	int *ptIdentifier;	//simplificar para int
-	char *ptCity;		//simplifcar para char[]
+	int id;	
+	char city[SIZENAME];
 	Adjacent *ptAdjacent;
 	Node *ptNext;
 };
@@ -104,7 +108,6 @@ typedef struct GraphIII
 {
 	int totalVertices;
 	int totalEdges;
-
 	Node* nodes;
 }GraphIII;
 
@@ -113,5 +116,27 @@ bool AdjacentDestroy(Adjacent* ptAdjacent);
 bool ListGraph(Node *graph);
 Node* CreateGraphTable(Node* graph, int position, char cityName[]);
 Node* CreateAdjacent(Node* graph, int origin, int destiny);
+
+#pragma endregion
+
+#pragma region SHORT_PATH_GRAFO_PESADO
+
+typedef struct NodoCaminho {
+	int idVertice;
+	struct NodoCaminho* prox;
+} NodoCaminho;
+
+void printPathRecursive(int prev[], int j);
+bool addEdgeWeightII(Graph* graph, int src, int dest, float p);
+void MostrarCaminho(NodoCaminho* caminho);
+NodoCaminho* GetShortestPath(Graph* graph, int startNode, int endNode);
+bool ShortestPath(Graph* graph, int startNode, int endNode);
+bool existeCaminho(Graph* g, int origem, int destino);
+void destroyGraph(Graph* g);
+bool SaveGraphToCSV(Graph* g, char* filename);
+Graph* LoadGraphFromCSV(char* filename);
+
+#pragma endregion
+
 #endif // !GRF
 
