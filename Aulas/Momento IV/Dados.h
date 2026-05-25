@@ -28,36 +28,41 @@ typedef struct Componente {
 // ============================================================================
 // R2: ARQUIVO DE LOGS DE QUALIDADE (BST - Árvore Binária de Procura)
 // ============================================================================
-typedef struct LogQualidade {
+typedef struct LogQualidade LogQualidade;
+struct LogQualidade {
     int idComponente;              // ID único
     bool aprovado;                 // true = Aprovado, false = Rejeitado
-    struct LogQualidade* esquerda;
-    struct LogQualidade* direita;
-} LogQualidade;
+    LogQualidade* esquerda;
+    LogQualidade* direita;
+};
 
 // ============================================================================
 // R3: LOCALIZADOR DE FERRAMENTAS (Tabela de Hash)
 // ============================================================================
-typedef struct ElementoHash {
+typedef struct ElementoHash ElementoHash;
+struct ElementoHash {
     char codigoFerramenta[SIZENAME]; // Para a chave hash
     int idPosto;                     // ID único (Onde a ferramenta está)
-    struct ElementoHash* prox;       // Resolução de colisões
-} ElementoHash;
+    ElementoHash* prox;       // Resolução de colisões
+};
 
 // ============================================================================
 // R4: INFRAESTRUTURA FÍSICA (Grafo por Lista de Adjacências)
 // ============================================================================
-typedef struct AdjListNode {
+typedef struct AdjListNode AdjListNode;
+
+struct AdjListNode {
     int idPostoDestino;            // ID único (Posto destino)
     float distanciaMetros;
-    struct AdjListNode* next;
-} AdjListNode;
+    AdjListNode* next;
+};
 
-typedef struct PostoTrabalho {
+typedef struct PostoTrabalho PostoTrabalho;
+struct PostoTrabalho {
     int idPosto;                   // ID único
     char nomePosto[SIZENAME];
     AdjListNode* head;             // Cabeça da lista de adjacentes  (arestas)
-} PostoTrabalho;
+};
 
 typedef struct GrafoFabrica {
     int totalPostos;
