@@ -47,24 +47,33 @@ int Inserir(HashTable* ht, int produtoID, Maquina m) {
     return 1;
 }
 
-int VerificarLinha(HashTable* ht, int produtoID) {
+/*!
+ *  2 b) - Pode ter outra implementação
+ *
+ *      @param [in,out] ht        
+ *      @param [in]     produtoID 
+ *
+ *      @return 
+ */
+float VerificarLinha(HashTable* ht, int produtoID) {
     if (!ht || produtoID < 0 || produtoID >= TABLE_SIZE || ht->linhas[produtoID] == NULL)
         return 0;
     ListaMaquinas *aux = ht->linhas[produtoID];
     double tempoTotal = 0;
-    printf("\n--- Linha de Peodução: %d ---\n", produtoID);
+    
     while (aux != NULL) {
-        printf(" -> [%d] : tempo: %0,2f\n", aux->maquina.num, aux->maquina.tempo);
+        //debug: printf(" -> [%d] : tempo: %0,2f\n", aux->maquina.num, aux->maquina.tempo);
         if (aux->maquina.estado == 0) {
-            printf("\t[ALERTA] Maquina %d AVARIADA\n", aux->maquina.num);
+            //debug: printf("\tMaquina %d AVARIADA\n", aux->maquina.num);
+            continue;
         }
         else {      
             tempoTotal += aux->maquina.tempo;
         }
         aux = aux->prox;
     }
-    printf("Tempo global de execução: %.2f\n", tempoTotal);
-    return 1;
+    
+    return tempoTotal;
 }
 
 int AtualizarMaquina(HashTable* ht, int numAntigo, Maquina nova) {

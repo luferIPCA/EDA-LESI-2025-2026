@@ -22,7 +22,7 @@ typedef struct Maquina {
 } Maquina;
 
 /*!
- *  Nó da Lista Ligada (Sequência de máquinas na Linha)
+ *  Nodo da Lista Ligada (Sequência de máquinas na Linha)
  */
 typedef struct ListaMaquinas {
     Maquina maquina;
@@ -80,7 +80,7 @@ typedef struct NodoABP {
 // Todos os métodos devolvem 1 (sucesso) ou 0 (falha)
 int Inicializar(HashTable* ht);
 int Inserir(HashTable* ht, int produtoID, Maquina m);
-int VerificarLinha(HashTable* ht, int produtoID);
+float VerificarLinha(HashTable* ht, int produtoID);
 int AtualizarMaquina(HashTable* ht, int numAntigo, Maquina nova);
 int GravarDados(HashTable* ht, const char* nomeFicheiro);
 int CarregarDados(HashTable* ht, const char* nomeFicheiro);
