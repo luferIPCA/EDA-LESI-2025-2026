@@ -16,18 +16,16 @@
 #define SIZENAME 50
 #define TAMANHO_HASH 101
 
- // ============================================================================
- // R1: PASSADEIRA DE TRIAGEM (Fila / Lista Ligada Simples)
- // ============================================================================
+ 
+ // R1: TRIAGEM (Fila / Lista Ligada Simples)
 typedef struct Componente {
     int idComponente;              // ID único
     char nome[SIZENAME];
     struct Componente* prox;
 } Componente;
 
-// ============================================================================
+
 // R2: ARQUIVO DE LOGS DE QUALIDADE (BST - Árvore Binária de Procura)
-// ============================================================================
 typedef struct LogQualidade LogQualidade;
 struct LogQualidade {
     int idComponente;              // ID único
@@ -36,9 +34,7 @@ struct LogQualidade {
     LogQualidade* direita;
 };
 
-// ============================================================================
 // R3: LOCALIZADOR DE FERRAMENTAS (Tabela de Hash)
-// ============================================================================
 typedef struct ElementoHash ElementoHash;
 struct ElementoHash {
     char codigoFerramenta[SIZENAME]; // Para a chave hash
@@ -46,9 +42,7 @@ struct ElementoHash {
     ElementoHash* prox;       // Resolução de colisões
 };
 
-// ============================================================================
 // R4: INFRAESTRUTURA FÍSICA (Grafo por Lista de Adjacências)
-// ============================================================================
 typedef struct AdjListNode AdjListNode;
 
 struct AdjListNode {
@@ -66,6 +60,6 @@ struct PostoTrabalho {
 
 typedef struct GrafoFabrica {
     int totalPostos;
-    PostoTrabalho* arrayPostos;    // Array de postos (vertices)
+    PostoTrabalho* arrayPostos;    // Array vertices
 } GrafoFabrica;
 
